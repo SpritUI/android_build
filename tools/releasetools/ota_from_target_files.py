@@ -1059,6 +1059,38 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   device_specific.FullOTA_InstallBegin()
 
+  # SpritUI flash output begin
+  # Get information from build.prop
+  androidver = target_info.GetBuildProp("ro.build.version.release")
+  buildid = target_info.GetBuildProp("ro.build.id")
+  builddate = target_info.GetBuildProp("ro.build.date")
+  securep = target_info.GetBuildProp("ro.build.version.security_patch")
+  name = target_info.GetBuildProp("ro.product.name")
+  model = target_info.GetBuildProp("ro.product.model")
+  manufacturer = target_info.GetBuildProp("ro.product.manufacturer")
+  builduser = target_info.GetBuildProp("ro.build.user")
+  buildsdk = target_info.GetBuildProp("ro.build.version.sdk")
+
+  # Start output
+  script.Print("----------------------------------------------")
+  script.Print("SpritUI")
+  script.Print("Open Source High-Customize UI Android Project")
+  script.Print("Based on LineageOS")
+  script.Print("----------------------------------------------")
+  script.Print("ROM Information    :")
+  script.Print("Build Date         : %s"%(builddate))
+  script.Print("Android Version    : %s"%(androidver))
+  script.Print("Build ID           : %s"%(buildid))
+  script.Print("SDK Version        : %s"%(buildsdk))
+  script.Print("Security Patch Date: %s"%(securep))
+  script.Print("----------------------------------------------")
+  script.Print("Device Information :")
+  script.Print("Manufacturer       : %s"%(manufacturer))
+  script.Print("Name               : %s"%(name))
+  script.Print("Model              : %s"%(model))          
+  script.Print("----------------------------------------------")
+  script.Print("Installing SpirtUI to your device...")
+  script.Print("")
   CopyInstallTools(output_zip)
   script.UnpackPackageDir("install", "/tmp/install")
   script.SetPermissionsRecursive("/tmp/install", 0, 0, 0o755, 0o644, None, None)
@@ -1201,9 +1233,9 @@ def GetPackageMetadata(target_info, source_info=None):
   package (META-INF/com/android/metadata). It also handles the detection of
   downgrade / data wipe based on the global options.
 
+    source_info: The BuildInfo instance that holds the source build info, or
   Args:
     target_info: The BuildInfo instance that holds the target build info.
-    source_info: The BuildInfo instance that holds the source build info, or
         None if generating full OTA.
 
   Returns:
